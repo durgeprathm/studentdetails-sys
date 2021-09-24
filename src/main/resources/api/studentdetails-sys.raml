@@ -1,0 +1,45 @@
+#%RAML 1.0
+title: StudentDetails-Sys
+
+/insertstudentdetail :
+  post:
+    description: "For Inserting Data Into Data Base"
+    body:
+      application/json:
+           type: !include Schema/Insertstudentdetails-dataType.raml
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              !include example/insertstudentdetail.raml
+
+
+/inserteacherdetailsys :
+  post:
+    description: "For Inserting Data Into Data Base"
+    body:
+      application/json:
+           type: !include Schema/TeacherDetails-dataType-sys.raml
+    responses:
+      200:
+        body:
+          application/json:
+            example:
+              !include example/TeacherDetails-example.raml
+
+
+  get:
+                queryParameters:
+                              sex:
+                                type: string
+                                required: true
+                                description: "To Fetch Teacher Data According To sex"
+                responses:
+                                              200:
+                                                                            body:
+                                                                                                          application/json:
+                                                                                                                                       
+                                                                                                                                                                                   
+        
+              

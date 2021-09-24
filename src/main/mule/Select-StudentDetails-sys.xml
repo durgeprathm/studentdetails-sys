@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="Select-StudentDetails-sysFlow" doc:id="6f887a08-df4b-47a8-a67c-e664eddf6f33" >
+		<db:select doc:name="SelectStudentDetails" doc:id="f3676644-12c6-4c1f-97b8-1c819b003f50" config-ref="Database_Config" target="dbresponsestudentdetails">
+			<db:sql ><![CDATA[SELECT * FROM student WHERE student_name = :name
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{name:vars.name}]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="7b7a2e40-06de-465e-bfa3-94b35e632c07" message="After Select Process"/>
+	</flow>
+</mule>

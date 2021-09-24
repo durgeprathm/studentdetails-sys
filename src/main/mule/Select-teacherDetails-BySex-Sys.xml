@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="Select-teacherDetails-BySex-SysFlow" doc:id="604dcb50-576f-4628-b109-b22527fe2d17" >
+		<logger level="INFO" doc:name="Logger" doc:id="74df8a7a-3e9e-4a98-b4d2-275426b07c70" message="In select-TeacherDetails-BySex-SYS Flow"/>
+		<set-variable value="#[attributes.queryParams.sex]" doc:name="Sex Variable" doc:id="dc2d9122-ae09-4307-9a79-6592aa9f1288" variableName="sex"/>
+		<db:select doc:name="Select" doc:id="11008bf4-50b5-4226-bcdc-d9d3426b3efd" config-ref="Database_Config" target="dbresponseforsex">
+			<db:sql ><![CDATA[SELECT * FROM `tbl_teacher` WHERE `teacher_sex`=:sex]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+'sex':lower(attributes.queryParams.sex)
+}]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="5da4fe59-6bd0-42d7-83eb-67ac551911ca" message="In select-TeacherDetails-BySex-SYS Flow after Select"/>
+		<choice doc:name="Choice" doc:id="897eb95c-a99e-4646-8456-36e213e7f71e" >
+			<when expression="sizeOf(vars.dbresponseforsex) != 0">
+				<logger level="INFO" doc:name="Logger" doc:id="04a0d37c-cd9d-4846-b9a6-d5d8efd4dfc0" />
+				<ee:transform doc:name="Transform Message" doc:id="06b5234b-0332-4721-826b-a95fd39c49b1" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+vars.dbresponseforsex]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="d20bf52d-c47e-4ab3-8945-320b00bb70ee" />
+				<ee:transform doc:name="Transform Message" doc:id="28ae440b-51fe-4be7-a47f-0f0ae5a7ca6b" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+		"Message":"Data Not Found for " ++ vars.sex
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</otherwise>
+		</choice>
+	</flow>
+</mule>

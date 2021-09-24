@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="d7d1a844-5c45-4bef-9433-d029fcac2db2" >
+		<db:my-sql-connection host="#[p('db.host')]" port="#[p('db.port')]" user="#[p('db.username')]" password="SUkTIhUXl1" database="#[p('db.database')]"/>
+	</db:config>
+	<flow name="Insert-StudentDetails-sysFlow" doc:id="e7692410-1ed5-44b6-875b-b8e88faaeb66" >
+		<db:insert doc:name="Insert" doc:id="7d450ab6-8773-4dbc-9c69-fd084e962d50" config-ref="Database_Config">
+			<db:sql ><![CDATA[INSERT INTO `student` (`student_name`, `student_father_name`, `student_mother_name`,`student_mobile_no`,`student_age`,`student_address`,`student_class`)VALUES (:name,:fathername,:mothername,:mobileno,:age,:address,:class);]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+'name':payload.studentname,
+'fathername':payload.studentfathername,
+'mothername':payload.studentmothername,
+'mobileno':payload.studentmobilenumber,
+'age':payload.studentage,
+'address':payload.studentaddress,
+'class':payload.studentclass
+}]]]></db:input-parameters>
+		</db:insert>
+		<ee:transform doc:name="Transform Message" doc:id="2efb5736-314c-4571-82d3-7788dca00e4f" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  Message: "Student Data Successfully Save"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="609d4847-71ee-40a2-9819-0afaba11ab27" message="After Data Sucessfully Inserted"/>
+	</flow>
+</mule>

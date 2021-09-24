@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="Main-TeacherDetails-sysFlow" doc:id="0e25ce1f-a44c-4bdf-9342-a122949d7055" >
+		<logger level="INFO" doc:name="Logger" doc:id="4216e2de-d7f2-40e6-9383-5cf3aea7517f" message="In Teacherdetails Main Flow "/>
+		<set-variable value="#[payload.teachername]" doc:name="TeacherName" doc:id="03e7034a-886b-40e0-b2b1-ede555e2daec" variableName="teachername"/>
+		<flow-ref doc:name="Select TeacherDetailsFlow Reference" doc:id="11c4803d-470e-4ddc-99bd-b82b7c0c9858" name="Select-teacherdetails-sysFlow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="0fc0fad0-437e-45e1-af6c-272b630f0f8e" message="In Mani TeacherDetails-sys Flow After select Flow Referance"/>
+		<choice doc:name="Choice" doc:id="c5f23ec2-516b-4ed5-a539-81bc1e26f4ea" >
+			<when expression="sizeOf(vars.dbresponseteacherdetails) == 0">
+				<flow-ref doc:name="Insert TeacherDetails Flow Reference" doc:id="ffb03b0a-e0d8-458b-9691-7add4ef4bd41" name="Insert-teacherdetails-sysFlow"/>
+				<logger level="INFO" doc:name="Logger" doc:id="c6871f28-5bd6-4f8f-8b08-3db236f5ab94" message="In Main-TeacherDetails-sys Flow After Insert Teacherdetails Flow Referance"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="3688ae37-0c2f-49c8-8d13-e78404139b15" message="In Default Of Main-TeacherDetails-sys Flow"/>
+				<ee:transform doc:name="Transform Message" doc:id="ccb9eea6-aebd-4b34-8d2a-4d8e3f78afae">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  Message: "Teacher Data Already Present"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="a7a3a810-ec65-48de-97be-700c273a9c52" message="In Default Of Main-TeacherDetails-sys Flow After Message"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="aa47332a-263e-4027-9b59-f19d30472b40" message="In Default Of Main-TeacherDetails-sys Flow After end Of TeacherDetails Process"/>
+	</flow>
+</mule>

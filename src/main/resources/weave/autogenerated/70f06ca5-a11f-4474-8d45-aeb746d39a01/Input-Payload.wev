@@ -1,0 +1,13 @@
+%dw 2.0
+
+type auto_70f06ca5_a11f_4474_8d45_aeb746d39a01_Input_Payload = {
+  teacherpincode: Number, 
+  teacherCureentcity: String, 
+  teachername: String, 
+  teachersex: String, 
+  teacherPermanentcity: String, 
+  teacherjoiningdate: String, 
+  teachermobileno: String, 
+  _?: Any
+}
+

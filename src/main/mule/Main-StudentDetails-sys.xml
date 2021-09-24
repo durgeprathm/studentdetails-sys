@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="studentdetails-Main-Flow">
+        <logger level="INFO" doc:name="Logger" doc:id="fa9547d7-9e46-4fc6-b62e-deb2bcbe0826" message="Inside Post Method"/>
+		<set-variable value="#[payload.studentname]" doc:name="StudentName" doc:id="20b8ff3d-004e-4f33-b8fb-5b21790a2d4f" variableName="name"/>
+		<flow-ref doc:name="Select Flow Reference" doc:id="6511d12a-5fd9-411c-ab8c-e31a1a5ced48" name="Select-StudentDetails-sysFlow"/>
+		<logger level="INFO" doc:name="Logger" doc:id="b8675dff-7e0b-40eb-9e02-6642d1cbfc43" message="After Select Flow reference"/>
+		<choice doc:name="Choice" doc:id="2d591f1a-9b71-45c4-b9e7-f102b718f901" >
+			<when expression="sizeOf(vars.dbresponsestudentdetails) == 0">
+				<flow-ref doc:name="Insert Flow Reference" doc:id="f593f47c-bd3b-4a47-89d2-e1332f978d00" name="Insert-StudentDetails-sysFlow"/>
+				<logger level="INFO" doc:name="Logger" doc:id="fcadb198-974e-45a0-b7a5-739272265a65" message="After Insert Flow reference"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="8d6e1f96-25c7-4735-a867-894d5fbe164f" message="In Defult"/>
+				<ee:transform doc:name="Transform Message" doc:id="5d34aa2f-4a9d-42fd-af90-52b08c95124c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  Message: "Data Already Present"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="a6ce100c-565f-4205-b308-29ce547194e2" message="After Message In Default"/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="07d9c97f-2f3b-458c-8aee-96e65da8483e" message="After End Of Process"/>
+    </flow>
+</mule>
+   

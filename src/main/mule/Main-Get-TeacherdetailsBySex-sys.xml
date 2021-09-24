@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<flow name="Main-Get-TeacherdetailsBySex-sysFlow" doc:id="f33ea9fa-5c39-4d19-b3c2-7dec88d940d4" >
+		<logger level="INFO" doc:name="Logger" doc:id="89ad072b-5496-4f25-8690-b84fcaa71e43" message="IN Main Get TeacherDetailsBySex"/>
+		<flow-ref doc:name="Flow Reference" doc:id="3e887bcf-19aa-40b8-96f1-a382540fcd5e" name="Select-teacherDetails-BySex-SysFlow"/>
+	</flow>
+</mule>

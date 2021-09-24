@@ -1,0 +1,31 @@
+#%RAML 1.0 DataType
+       properties:
+          teachername:
+            required: true
+            type: string
+            description: "Enter Teacher Name"
+          teachersex:
+            required: true
+            type: string
+            description: "Enter Teacher Sex(Male/Female/Other)"
+          teachermobileno:
+            required: true
+            maxLength: 10
+            minLength: 10
+            description:  "Enter Teacher Mobile Number"
+          teacherCureentcity:
+            required: true
+            type: string
+            description: "Enter Teacher City Current Name"
+          teacherPermanentcity:
+            required: true
+            type: string
+            description: "Enter Teacher Permanent City Name"
+          teacherpincode:
+            required: true
+            type: integer
+            description: "Enter Teacher Pin Code"
+          teacherjoiningdate:
+            required: true
+            type: date-only  
+            description: "Enter Teacher Joining Date"

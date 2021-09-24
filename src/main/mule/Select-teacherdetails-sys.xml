@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="Select-teacherdetails-sysFlow" doc:id="70f06ca5-a11f-4474-8d45-aeb746d39a01" >
+		<logger level="INFO" doc:name="Logger" doc:id="ca3e2b14-fbfa-4b18-8288-5d245c4482de" message="In select-teacherdetails-sys Flow"/>
+		<db:select doc:name="Select" doc:id="7685a8a0-c01e-41a7-9ac4-168ef4d9317b" config-ref="Database_Config" target="dbresponseteacherdetails">
+			<db:sql ><![CDATA[SELECT * FROM tbl_teacher WHERE teacher_name = :teachernamepara
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[teachernamepara:vars.teachername]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="70cd1ec4-6a62-4b19-9105-baa7ab56f181" message="In select-teacherdetails-sys Flow After Select Process"/>
+	</flow>
+</mule>

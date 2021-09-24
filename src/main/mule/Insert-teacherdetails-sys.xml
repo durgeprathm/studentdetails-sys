@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd">
+	<flow name="Insert-teacherdetails-sysFlow" doc:id="6bcf6f4f-f80a-4c6b-af77-620091ff1159" >
+		<logger level="INFO" doc:name="Logger" doc:id="9145cc45-3e03-4442-8c60-337fb81121f6" message="In Insert-teacherdetails-sys flow "/>
+		<set-variable value="#[payload.teacherPermanentcity]" doc:name="City-Permanent" doc:id="44b02b2f-1e79-46cf-9357-aaadea91f92d" variableName="city"/>
+		<logger level="INFO" doc:name="Logger" doc:id="7db26d00-9cdd-49a9-82bf-df021d0cbdb9" message="In Insert-teacherdetails-sys flow After set variable city"/>
+		<choice doc:name="Choice" doc:id="5cbfe956-c179-4bde-ac55-fd9a4ae322d9" >
+			<when expression='#[lower(vars.city)=="nagpur"]'>
+				<logger level="INFO" doc:name="Logger" doc:id="20f7288e-d472-4e01-84a3-2bd09fad94a9" message="In Insert-teacherdetails-sys flow In Insert Condition"/>
+				<db:insert doc:name="Insert" doc:id="6959b405-842d-4d9e-9879-c7e0e1088d77" config-ref="Database_Config">
+					<db:sql ><![CDATA[INSERT INTO `tbl_teacher`(`teacher_name`, `teacher_sex`, `teacher_mobileno`, `teacher_city`, `teacher_pincode`, `teacher_joining_date`) VALUES (:teachername,:teachersex,:teachermobileno,:teachercity,:teacherpincode,:teacherjoiningdate)]]></db:sql>
+					<db:input-parameters ><![CDATA[#[{
+	'teachername':lower(payload.teachername),
+		'teachersex':lower(payload.teachersex),
+	'teachermobileno':lower(payload.teachermobileno),
+		'teachercity':lower(payload.teacherPermanentcity),
+		'teacherpincode':lower(payload.teacherpincode),
+		'teacherjoiningdate':lower(payload.teacherjoiningdate)
+}]]]></db:input-parameters>
+				</db:insert>
+				<ee:transform doc:name="Transform Message" doc:id="d19ff436-162b-46b4-b1ef-100528861829" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  Message: "Teacher Data Save Successfully"
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="f2e523e5-6e3b-4529-8d06-6415f7c51281" message="In Insert-teacherdetails-sys flow In Insert Condition After Insert Process"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="e14db852-1d1e-4779-a7e1-e5b16702456e" message="In Insert-teacherdetails-sys flow In Default"/>
+				<ee:transform doc:name="Transform Message" doc:id="4a565177-6448-4ca7-9422-3563da42766d" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message":"Permanent City Must be Nagpur You Enter "++ vars.city
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="8abf8be4-6d6a-41ca-9aa1-78558c27c6e1" message="In Insert-teacherdetails-sys flow In Default After Message "/>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="adbf4946-b188-4421-b617-e4ff62c55e57" message="In Insert-teacherdetails-sys After End Of Process"/>
+	</flow>
+</mule>

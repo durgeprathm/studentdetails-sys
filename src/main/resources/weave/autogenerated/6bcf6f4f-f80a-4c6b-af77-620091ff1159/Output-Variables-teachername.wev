@@ -1,0 +1,4 @@
+%dw 2.0
+
+type auto_6bcf6f4f_f80a_4c6b_af77_620091ff1159_Output_Variables_teachername = Any
+
